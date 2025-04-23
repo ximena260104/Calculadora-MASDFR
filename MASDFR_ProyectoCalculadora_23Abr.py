@@ -45,7 +45,7 @@ def calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm):
     prima_exceso_rc = (exceso_rc // 50000) * config["recargo_rc"]
     prima_exceso_gm = (exceso_gm // 10000) * config["recargo_gm"]
 
-    prima_total = (
+    prima_sin_iva = (
         prima_dm +
         prima_rt +
         prima_rc +
@@ -54,22 +54,31 @@ def calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm):
         prima_exceso_gm
     )
 
+    iva = prima_sin_iva * 0.16
+    prima_total_con_iva = prima_sin_iva + iva
+
     return {
+        "prima_sin_iva": prima_sin_iva,
+        "iva": iva,
+        "prima_total_con_iva": prima_total_con_iva,
         "prima_dm": prima_dm,
         "prima_rt": prima_rt,
         "prima_rc": prima_rc,
         "prima_exceso_rc": prima_exceso_rc,
         "prima_gm": prima_gm,
-        "prima_exceso_gm": prima_exceso_gm,
-        "prima_total": prima_total
+        "prima_exceso_gm": prima_exceso_gm
     }
 
 # === INTERFAZ STREAMLIT ===
 
 def main():
     st.set_page_config(page_title="Cálculo de Prima de Seguro", page_icon="🧾", layout="centered")
-    st.markdown("# 🧾 Cálculo de Prima de Seguro")
-    st.markdown("Calcula el monto total de tu prima con base en los deducibles seleccionados y sumas aseguradas.")
+    st.markdown("# 🧾 Cálculo de Prima de un Seguro de Automóvil")
+    st.markdown("""
+    Esta calculadora te permite conocer el monto total de tu prima de seguro para automóvil, basado en las coberturas seleccionadas y las sumas aseguradas elegidas. 
+    Incluye los cálculos de los recargos por deducibles y las coberturas adicionales, como Daños Materiales, Robo Total, Responsabilidad Civil y Gastos Médicos.
+    La prima total también incluye el IVA del 16% para darte un panorama claro del costo total del seguro.
+    """)
 
     recargos = obtener_recargos_deducibles()
     config = obtener_configuracion_producto()
@@ -98,7 +107,8 @@ def main():
         | ➕ **Responsabilidad Civil - Exceso** | ${:,.2f} |
         | ✅ **Gastos Médicos - Básica** | ${:,.2f} |
         | ➕ **Gastos Médicos - Exceso** | ${:,.2f} |
-        | 🧮 **Total Prima Emitida** | **${:,.2f}** |
+        | ➕ **IVA (16%)** | ${:,.2f} |
+        | 🧮 **Total Prima Emitida (con IVA)** | **${:,.2f}** |
         """.format(
             resultado['prima_dm'],
             resultado['prima_rt'],
@@ -106,7 +116,8 @@ def main():
             resultado['prima_exceso_rc'],
             resultado['prima_gm'],
             resultado['prima_exceso_gm'],
-            resultado['prima_total']
+            resultado['iva'],
+            resultado['prima_total_con_iva']
         ))
 
         st.balloons()
