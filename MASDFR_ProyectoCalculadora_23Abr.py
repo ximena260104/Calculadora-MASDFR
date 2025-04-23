@@ -109,7 +109,7 @@ def main():
         | ➕ Gastos Médicos - Exceso | ${:,.2f} |
         | 💸 Prima sin IVA | ${:,.2f} |
         | 🧾 IVA (16%) | ${:,.2f} |
-        | 💰 Total Neta (Prima Emitida Final) | **${:,.2f}** |
+        | 💰 Total con IVA (Prima Emitida Final) | **${:,.2f}** |
         """.format(
             resultado['prima_dm'],
             resultado['prima_rt'],
@@ -117,9 +117,9 @@ def main():
             resultado['prima_exceso_rc'],
             resultado['prima_gm'],
             resultado['prima_exceso_gm'],
-            resultado['prima_sin_IVA'],
-            resultado['IVA'],
-            resultado['prima_neta_']
+            resultado['prima_sin_iva'],
+            resultado['iva'],
+            resultado['prima_total_con_iva']
         ))
 
         st.success("✅ Cálculo completado correctamente.")
