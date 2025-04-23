@@ -97,7 +97,7 @@ def main():
     if st.button("💡 Calcular Prima"):
         resultado = calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm)
 
-        st.markdown("## 🧾 Desglose de Prima por Cobertura")
+        st.markdown("## 🧾 Desglose de Prima Total")
         st.markdown("""
         | Concepto | Monto ($) |
         |----------|-----------:|
@@ -107,25 +107,23 @@ def main():
         | ➕ Responsabilidad Civil - Exceso | ${:,.2f} |
         | ✅ Gastos Médicos - Básica | ${:,.2f} |
         | ➕ Gastos Médicos - Exceso | ${:,.2f} |
+        | 💸 Prima sin IVA | ${:,.2f} |
+        | 🧾 IVA (16%) | ${:,.2f} |
+        | 💰 Total Neta (Prima Emitida Final) | **${:,.2f}** |
         """.format(
             resultado['prima_dm'],
             resultado['prima_rt'],
             resultado['prima_rc'],
             resultado['prima_exceso_rc'],
             resultado['prima_gm'],
-            resultado['prima_exceso_gm']
+            resultado['prima_exceso_gm'],
+            resultado['prima_sin_IVA'],
+            resultado['IVA'],
+            resultado['prima_neta_']
         ))
-
-        st.markdown("## 💰 Detalle de Prima Total")
-        st.markdown(f"""
-        - **Prima sin IVA**: ${resultado['prima_sin_iva']:,.2f}  
-        - **IVA (16%)**: ${resultado['iva']:,.2f}  
-        - **Total con IVA (Prima Emitida Final)**: **${resultado['prima_total_con_iva']:,.2f}**
-        """)
 
         st.success("✅ Cálculo completado correctamente.")
         st.balloons()
 
 if __name__ == "__main__":
     main()
-
