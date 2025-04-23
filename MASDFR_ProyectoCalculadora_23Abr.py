@@ -3,23 +3,22 @@ import streamlit as st
 # === CONFIGURACIONES ===
 
 def obtener_recargos_deducibles():
-    recargos_dm = {
-        8: -0.10,
-        6: -0.05,
-        5:  0.00,
-        4:  0.05,
-        2:  0.10
+    return {
+        "DM": {
+            8: -0.10,
+            6: -0.05,
+            5:  0.00,
+            4:  0.05,
+            2:  0.10
+        },
+        "RT": {
+            14: -0.10,
+            12: -0.05,
+            10:  0.00,
+            8:   0.05,
+            6:   0.10
+        }
     }
-
-    recargos_rt = {
-        14: -0.10,
-        12: -0.05,
-        10:  0.00,
-        8:   0.05,
-        6:   0.10
-    }
-
-    return recargos_dm, recargos_rt
 
 def obtener_configuracion_producto():
     return {
@@ -33,9 +32,9 @@ def obtener_configuracion_producto():
         "recargo_gm": 20
     }
 
-def calcular_prima_total(config, recargos_dm, recargos_rt, ded_dm, ded_rt, sa_rc, sa_gm):
-    prima_dm = config["prima_basica_dm"] * (1 + recargos_dm[ded_dm])
-    prima_rt = config["prima_basica_rt"] * (1 + recargos_rt[ded_rt])
+def calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm):
+    prima_dm = config["prima_basica_dm"] * (1 + recargos["DM"][ded_dm])
+    prima_rt = config["prima_basica_rt"] * (1 + recargos["RT"][ded_rt])
 
     prima_rc = config["prima_basica_rc"]
     prima_gm = config["prima_basica_gm"]
@@ -68,28 +67,49 @@ def calcular_prima_total(config, recargos_dm, recargos_rt, ded_dm, ded_rt, sa_rc
 # === INTERFAZ STREAMLIT ===
 
 def main():
-    st.title("🧾 Cálculo de Prima de Seguro")
+    st.set_page_config(page_title="Cálculo de Prima de Seguro", page_icon="🧾", layout="centered")
+    st.markdown("# 🧾 Cálculo de Prima de Seguro")
+    st.markdown("Calcula el monto total de tu prima con base en los deducibles seleccionados y sumas aseguradas.")
 
-    recargos_dm, recargos_rt = obtener_recargos_deducibles()
+    recargos = obtener_recargos_deducibles()
     config = obtener_configuracion_producto()
 
-    ded_dm = st.selectbox("Selecciona el deducible para Daños Materiales (%)", options=list(recargos_dm.keys()))
-    ded_rt = st.selectbox("Selecciona el deducible para Robo Total (%)", options=list(recargos_rt.keys()))
-    sa_rc = st.number_input("Suma Asegurada para Responsabilidad Civil ($)", min_value=config["sa_basica_rc"], step=50000)
-    sa_gm = st.number_input("Suma Asegurada para Gastos Médicos ($)", min_value=config["sa_basica_gm"], step=10000)
+    with st.expander("🛠️ Configura tu seguro"):
+        col1, col2 = st.columns(2)
 
-    if st.button("Calcular Prima"):
-        resultado = calcular_prima_total(config, recargos_dm, recargos_rt, ded_dm, ded_rt, sa_rc, sa_gm)
-        
-        st.subheader("📋 Desglose de la Prima")
-        st.write(f"**Daños Materiales (ajustada):** ${resultado['prima_dm']:,.2f}")
-        st.write(f"**Robo Total (ajustada):** ${resultado['prima_rt']:,.2f}")
-        st.write(f"**Responsabilidad Civil - Básica:** ${resultado['prima_rc']:,.2f}")
-        st.write(f"**Responsabilidad Civil - Exceso:** ${resultado['prima_exceso_rc']:,.2f}")
-        st.write(f"**Gastos Médicos - Básica:** ${resultado['prima_gm']:,.2f}")
-        st.write(f"**Gastos Médicos - Exceso:** ${resultado['prima_exceso_gm']:,.2f}")
-        st.markdown("---")
-        st.success(f"**TOTAL PRIMA EMITIDA:** ${resultado['prima_total']:,.2f}")
+        with col1:
+            ded_dm = st.selectbox("📉 Deducible Daños Materiales (%)", options=sorted(recargos["DM"].keys()))
+            sa_rc = st.number_input("🚗 Suma Asegurada RC ($)", min_value=config["sa_basica_rc"], step=50000)
+
+        with col2:
+            ded_rt = st.selectbox("🔐 Deducible Robo Total (%)", options=sorted(recargos["RT"].keys()))
+            sa_gm = st.number_input("💊 Suma Asegurada GM ($)", min_value=config["sa_basica_gm"], step=10000)
+
+    if st.button("💡 Calcular Prima"):
+        resultado = calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm)
+
+        st.markdown("## 🧾 Desglose de Prima")
+        st.markdown("""
+        | Concepto | Monto ($) |
+        |----------|------------:|
+        | ✅ **Daños Materiales (ajustada)** | ${:,.2f} |
+        | ✅ **Robo Total (ajustada)** | ${:,.2f} |
+        | ✅ **Responsabilidad Civil - Básica** | ${:,.2f} |
+        | ➕ **Responsabilidad Civil - Exceso** | ${:,.2f} |
+        | ✅ **Gastos Médicos - Básica** | ${:,.2f} |
+        | ➕ **Gastos Médicos - Exceso** | ${:,.2f} |
+        | 🧮 **Total Prima Emitida** | **${:,.2f}** |
+        """.format(
+            resultado['prima_dm'],
+            resultado['prima_rt'],
+            resultado['prima_rc'],
+            resultado['prima_exceso_rc'],
+            resultado['prima_gm'],
+            resultado['prima_exceso_gm'],
+            resultado['prima_total']
+        ))
+
+        st.balloons()
 
 if __name__ == "__main__":
     main()
