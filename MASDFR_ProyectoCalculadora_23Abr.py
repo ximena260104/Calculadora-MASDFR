@@ -77,7 +77,6 @@ def main():
     st.markdown("""
     Esta calculadora te permite conocer el monto total de tu prima de seguro para automóvil, basado en las coberturas seleccionadas y las sumas aseguradas elegidas. 
     Incluye los cálculos de los recargos por deducibles y las coberturas adicionales, como Daños Materiales, Robo Total, Responsabilidad Civil y Gastos Médicos.
-    La prima total también incluye el IVA del 16% para darte un panorama claro del costo total del seguro.
     """)
 
     recargos = obtener_recargos_deducibles()
