@@ -76,7 +76,7 @@ def main():
 
     # Sidebar del proyecto
     with st.sidebar:
-        st.title("⚙️ INTEGRANTES ")
+        st.title("⚙️ PROYECTO CALCULADORA ")
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         st.markdown("""
         **👥 Integrantes:**
