@@ -73,11 +73,29 @@ def calcular_prima_total(config, recargos, ded_dm, ded_rt, sa_rc, sa_gm):
 
 def main():
     st.set_page_config(page_title="Cálculo de Prima de Seguro", page_icon="🧾", layout="centered")
+
+    # Sidebar del proyecto
+    with st.sidebar:
+        st.title("⚙️ Proyecto 1")
+        st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
+        st.markdown("""
+        **👥 Integrantes:**
+        - Oziel Hernández  
+        - Daniela Borzani  
+        - Santiago Cruz  
+        - Ximena Paredes  
+        """)
+        st.markdown("---")
+
+    # Título e introducción principal
     st.markdown("# 🧾 Cálculo de Prima de un Seguro de Automóvil")
     st.markdown("""
     Esta calculadora te permite conocer el monto total de tu prima de seguro para automóvil, basado en las coberturas seleccionadas y las sumas aseguradas elegidas. 
     Incluye los cálculos de los recargos por deducibles y las coberturas adicionales, como Daños Materiales, Robo Total, Responsabilidad Civil y Gastos Médicos.
+    La prima total también incluye el IVA del 16% para darte un panorama claro del costo total del seguro.
     """)
+
+    nombre = st.text_input("👤 Ingresa tu nombre:", value="Ximena")
 
     recargos = obtener_recargos_deducibles()
     config = obtener_configuracion_producto()
@@ -108,7 +126,7 @@ def main():
         | ➕ Gastos Médicos - Exceso | ${:,.2f} |
         | 💸 Prima sin IVA | ${:,.2f} |
         | 🧾 IVA (16%) | ${:,.2f} |
-        | 💰 Prima neta | **${:,.2f}** |
+        | 💰 Total con IVA (Prima Emitida Final) | **${:,.2f}** |
         """.format(
             resultado['prima_dm'],
             resultado['prima_rt'],
@@ -120,8 +138,7 @@ def main():
             resultado['iva'],
             resultado['prima_total_con_iva']
         ))
-
-        st.success("✅ Cálculo completado correctamente.")
+        
         st.balloons()
 
 if __name__ == "__main__":
