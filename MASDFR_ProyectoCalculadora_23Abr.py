@@ -80,10 +80,10 @@ def main():
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         st.markdown("""
         **👥 Integrantes:**
-        - Oziel Hernández  
-        - Daniela Borzani  
-        - Santiago Cruz  
-        - Ximena Paredes  
+        - Joshua Santiago Cruz Peréz 
+        - Erika Ximena Luna Armas  
+        - Ximena Paredes Hernández   
+        - Mario Ramirez Geronimo  
         """)
         st.markdown("---")
 
@@ -92,7 +92,6 @@ def main():
     st.markdown("""
     Esta calculadora te permite conocer el monto total de tu prima de seguro para automóvil, basado en las coberturas seleccionadas y las sumas aseguradas elegidas. 
     Incluye los cálculos de los recargos por deducibles y las coberturas adicionales, como Daños Materiales, Robo Total, Responsabilidad Civil y Gastos Médicos.
-    La prima total también incluye el IVA del 16% para darte un panorama claro del costo total del seguro.
     """)
 
     nombre = st.text_input("👤 Ingresa tu nombre:", value="Ximena")
@@ -126,7 +125,7 @@ def main():
         | ➕ Gastos Médicos - Exceso | ${:,.2f} |
         | 💸 Prima sin IVA | ${:,.2f} |
         | 🧾 IVA (16%) | ${:,.2f} |
-        | 💰 Total con IVA (Prima Emitida Final) | **${:,.2f}** |
+        | 💰 Prima Neta | **${:,.2f}** |
         """.format(
             resultado['prima_dm'],
             resultado['prima_rt'],
