@@ -76,7 +76,7 @@ def main():
 
     # Sidebar del proyecto
     with st.sidebar:
-        st.title("⚙️ Proyecto 1")
+        st.title("⚙️ INTEGRANTES ")
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         st.markdown("""
         **👥 Integrantes:**
@@ -93,8 +93,6 @@ def main():
     Esta calculadora te permite conocer el monto total de tu prima de seguro para automóvil, basado en las coberturas seleccionadas y las sumas aseguradas elegidas. 
     Incluye los cálculos de los recargos por deducibles y las coberturas adicionales, como Daños Materiales, Robo Total, Responsabilidad Civil y Gastos Médicos.
     """)
-
-    nombre = st.text_input("👤 Ingresa tu nombre:", value="Ximena")
 
     recargos = obtener_recargos_deducibles()
     config = obtener_configuracion_producto()
